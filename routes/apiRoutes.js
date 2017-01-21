@@ -251,7 +251,94 @@ router.route('/Report')
 
 	//  Callback Functions for Report
 	function getReport(req,res){
+		Currency.find({}, (err1, currency) =>{
+			Country.find({}, (err2, country) =>{
+				// variables 
+				let  today = new Date();
+				let dayArray = [];
+				let  report = [];
 
+				//  Create uniques  day for each record  in DB
+				for (let i = 0; i < currency.length; i++){
+					let recordCreatedDate = new Date( currency[i].createdAt );
+					let date = new Date(recordCreatedDate.getFullYear(),recordCreatedDate.getMonth(),recordCreatedDate.getDate());
+					if (!arrayContainsDate(dayArray,date)){
+						dayArray.push(date);
+					}
+				}
+				for (let j = 0; j < country.length; j++){
+					let recordCreatedDate = new Date( country[j].createdAt );
+					let date = new Date(recordCreatedDate.getFullYear(),recordCreatedDate.getMonth(),recordCreatedDate.getDate());
+					if (!arrayContainsDate(dayArray,date)){
+						dayArray.push(date);
+					}
+				}
+				///   Create Report
+				for (let i = 0; i < dayArray.length;i++){
+					let day = {};
+					let sum = {};
+					let countryCounter=0;
+					let currencyCounter=0;
+
+					for (let k = 0; k <country.length; k++){
+						let localDateDB = new Date( currency[k].createdAt );
+						let localDate = new Date(localDateDB.getFullYear(),localDateDB.getMonth(),localDateDB.getDate());
+
+						if(dayArray[i].getFullYear() === localDateDB.getFullYear()){
+							if(dayArray[i].getMonth() === localDateDB.getMonth()){
+								if(dayArray[i].getDate() === localDateDB.getDate()){
+									countryCounter++;
+								}
+							}
+						}
+					}
+					for(let p = 0; p < currency.length; p++){
+						let localDateDB = new Date( currency[p].createdAt );
+						let localDate = new Date(localDateDB.getFullYear(),localDateDB.getMonth(),localDateDB.getDate());
+						
+						if(dayArray[i].getFullYear() === localDateDB.getFullYear()){
+							if(dayArray[i].getMonth() === localDateDB.getMonth()){
+								if(dayArray[i].getDate() === localDateDB.getDate()){
+									currencyCounter++;
+								}
+							}
+						}
+					}
+
+					let date = dayArray[i];
+					sum.country = countryCounter;
+					sum.currency = currencyCounter;
+
+					report.push({date,sum});
+				}
+
+
+
+				res.json(report);
+
+
+
+
+
+				//  Check if array contains  date  params  ===> (Array, date)
+				function arrayContainsDate(array,date){
+					var toReturn=false;
+					for (let i=0;i<array.length;i++){
+						if (array[i].getFullYear() === date.getFullYear()){
+							if (array[i].getMonth() === date.getMonth()){
+								if (array[i].getDate() === date.getDate()){
+									toReturn = true;
+								}
+							}
+						}
+						
+						
+					}
+					return toReturn;
+				}
+
+			});
+		});
 	};
 
 
