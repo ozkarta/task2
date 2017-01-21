@@ -275,37 +275,42 @@ router.route('/Report')
 				}
 				///   Create Report
 				for (let i = 0; i < dayArray.length;i++){
-					let day = {};
+					let date;
 					let sum = {};
-					let countryCounter=0;
-					let currencyCounter=0;
+					//  Counters
+					let countryCounter = 0;
+					let currencyCounter = 0;
 
+					//  If   iteratad country date is same as  iterated dayArray date
+					//  then  counter++ 
 					for (let k = 0; k <country.length; k++){
 						let localDateDB = new Date( currency[k].createdAt );
 						let localDate = new Date(localDateDB.getFullYear(),localDateDB.getMonth(),localDateDB.getDate());
 
-						if(dayArray[i].getFullYear() === localDateDB.getFullYear()){
-							if(dayArray[i].getMonth() === localDateDB.getMonth()){
-								if(dayArray[i].getDate() === localDateDB.getDate()){
+						if (dayArray[i].getFullYear() === localDateDB.getFullYear()){
+							if (dayArray[i].getMonth() === localDateDB.getMonth()){
+								if (dayArray[i].getDate() === localDateDB.getDate()){
 									countryCounter++;
 								}
 							}
 						}
 					}
-					for(let p = 0; p < currency.length; p++){
+					//  If   iteratad currency date is same as  iterated dayArray date
+					//  then  counter++ 
+					for (let p = 0; p < currency.length; p++){
 						let localDateDB = new Date( currency[p].createdAt );
 						let localDate = new Date(localDateDB.getFullYear(),localDateDB.getMonth(),localDateDB.getDate());
 						
-						if(dayArray[i].getFullYear() === localDateDB.getFullYear()){
-							if(dayArray[i].getMonth() === localDateDB.getMonth()){
-								if(dayArray[i].getDate() === localDateDB.getDate()){
+						if (dayArray[i].getFullYear() === localDateDB.getFullYear()){
+							if (dayArray[i].getMonth() === localDateDB.getMonth()){
+								if (dayArray[i].getDate() === localDateDB.getDate()){
 									currencyCounter++;
 								}
 							}
 						}
 					}
 
-					let date = dayArray[i];
+					date = dayArray[i];
 					sum.country = countryCounter;
 					sum.currency = currencyCounter;
 
